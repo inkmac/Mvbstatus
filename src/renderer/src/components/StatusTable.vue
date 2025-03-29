@@ -35,7 +35,7 @@
         :label="columnName"
         :prop="columnName"
         :width="getColumnWidth(columnName)"
-        :fixed="i < 3 ? 'left' : false">
+        :fixed="i < 3 ? 'left' : false"
     ></el-table-column>
   </el-table>
 </template>

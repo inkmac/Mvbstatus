@@ -4,7 +4,7 @@
   </div>
 
   <div class="train-image">
-    <img src="../assets/image/Train_short.png" alt="Train Diagram">
+    <img src="@renderer/assets/image/Train_short.png" alt="Train Diagram">
   </div>
 </template>
 

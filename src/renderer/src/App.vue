@@ -1,26 +1,22 @@
-<script setup lang="ts">
-import Versions from './components/Versions.vue'
+<template>
+  <Title/>
+  <TestConnection/>
+  <StatusTable/>
+  <el-row>
+    <SoftwareInfo/>
+    <ControlButton/>
+  </el-row>
+</template>
 
-const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+<script setup lang="ts">
+import Title from "@renderer/components/Title.vue"
+import TestConnection from "@renderer/components/TestConnection.vue"
+import StatusTable from "@renderer/components/StatusTable.vue";
+import SoftwareInfo from "@renderer/components/SoftwareInfo.vue";
+import ControlButton from "@renderer/components/ControlButton.vue";
+
 </script>
 
-<template>
-  <img alt="logo" class="logo" src="./assets/electron.svg" />
-  <div class="creator">Powered by electron-vite</div>
-  <div class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
-  </div>
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-    </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
-    </div>
-  </div>
-  <Versions />
-</template>
+<style scoped>
+
+</style>

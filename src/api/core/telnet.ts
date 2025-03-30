@@ -1,7 +1,7 @@
 import { Telnet } from 'telnet-client';
 import fs from "fs";
-import { sleep } from "../utils/time";
-import { zipLongest } from '../utils/utils'
+import { sleep } from "@api/utils/time";
+import { zipLongest } from '@api/utils/utils'
 import dayjs from "dayjs";
 
 // region Telnet Static Config

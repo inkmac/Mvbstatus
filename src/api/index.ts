@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express'
-import {TelnetCommunication} from "./core/telnet";
+import {TelnetCommunication} from "@api/core/telnet";
 import dayjs from "dayjs";
 import ping from 'ping';
 import morgan from "morgan";

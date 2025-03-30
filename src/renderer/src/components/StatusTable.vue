@@ -1,34 +1,6 @@
 <template>
-  <el-table class="status-table" :data="statusData" :cell-style="cellStyle" height="500" border>
-
-    <!-- Expandable row -->
-<!--    <el-table-column type="expand" fixed="left">-->
-<!--      <template #default="props">-->
-<!--        <div>-->
-<!--          <el-table border :data="[props.row]">-->
-<!--            <el-table-column-->
-<!--              v-for="columnName in dynamicColumns.slice(0, 3)"-->
-<!--              :key="columnName"-->
-<!--              :label="columnName"-->
-<!--              :prop="columnName"-->
-<!--              :width="getColumnWidth(columnName)"-->
-<!--            ></el-table-column>-->
-<!--          </el-table>-->
-
-<!--          <el-table border :data="[props.row]">-->
-<!--            <el-table-column-->
-<!--                v-for="columnName in dynamicColumns.slice(3, 20)"-->
-<!--                :key="columnName"-->
-<!--                :label="columnName"-->
-<!--                :prop="columnName"-->
-<!--                :width="getColumnWidth(columnName)"-->
-<!--            ></el-table-column>-->
-<!--          </el-table>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
-
-    <!-- Line show -->
+  <el-table class="status-table" :data="statusData" :cell-style="cellStyle"
+            height="50vh" border>
     <el-table-column
         v-for="(columnName, i) in dynamicColumns"
         :key="columnName"

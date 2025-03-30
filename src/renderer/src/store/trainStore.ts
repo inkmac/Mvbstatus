@@ -1,8 +1,9 @@
 import {defineStore} from "pinia";
-import {reactive, ref} from "vue";
+import { computed, reactive, ref } from "vue";
+import { trainIPDict } from "@renderer/config";
 
 export const useTrainStore =  defineStore('train', () => {
-  const trainValue = ref('Ts221')
+  const trainValue = ref('Ts1')
   const MPUValue = ref('MPU1')
   const statusData = reactive([
     {No: 1, Date: "2025-03-13", Time: "14:30:00", MPU1: "C1", MPU2: "C1", R1A1: "AF", R2A1: "BF", R3A1: "LC"},
@@ -22,5 +23,7 @@ export const useTrainStore =  defineStore('train', () => {
 
   ])
 
-  return { trainValue, MPUValue, statusData }
+  const MPU_IP = computed(() => trainIPDict[`${trainValue.value}_${MPUValue.value}`])
+
+  return { trainValue, MPUValue, statusData, MPU_IP }
 })

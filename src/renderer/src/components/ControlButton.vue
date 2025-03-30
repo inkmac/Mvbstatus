@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 import {onUnmounted, ref} from "vue";
-import {MPU_IP} from "@renderer/config";
 import axios from "@renderer/api/http";
 import {useTrainStore} from "@renderer/store/trainStore";
 import {storeToRefs} from "pinia";
@@ -20,7 +19,7 @@ const canStop = ref(false)
 const isRunning = ref(false)
 let interval: NodeJS.Timeout | null = null
 
-const {trainValue, MPUValue, statusData} = storeToRefs(useTrainStore())
+const {trainValue, MPUValue, statusData, MPU_IP} = storeToRefs(useTrainStore())
 
 
 function startRunning() {
@@ -39,7 +38,7 @@ function startRunning() {
   axios.post(`/start-connection`, {
     train: trainValue.value,
     MPU: MPUValue.value,
-    MPU_IP: MPU_IP
+    MPU_IP: MPU_IP.value
   }).then(response => {
     const {status, message} = response.data;
 

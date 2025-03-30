@@ -6,26 +6,9 @@ import dayjs from "dayjs";
 
 // region Telnet Static Config
 
-const MaxTrain = 53
-const TestTrain = "y"  // used control the test train not not
-const TestTrainIP1 = "10.106.1.41"  // this IP1 will be add in list
-const TestTrainIP2 = "192.168.1.69"  // this IP2 will be add in list
-const SwRev = 'V1.1.1'
-const projectName = '南京七号线'
-const IPPro = "10.106."
-const IPOffest = 0
-
-const MPU1IP = ".41"
-const MPU2IP = ".42"
-const TestTrainNum = "221"
-const TrainNo = ""
-const MPUNo = ""
-const TrainDev = ""
-const LogHost = ""
 const PollingTime = 5000   // ms delay this timer to get next MVB status
 const polling = 1000
 const user = "root"
-const line = ""
 const Ending = "Interface name : mvb"
 
 const DevList = ["0x001", "0x002", "0x011", "0x012", "0x013", "0x014", "0x021", "0x015", "0x016", "0x017",
@@ -46,35 +29,7 @@ const DevNumList = ["MPU1", "MPU2", "R1A1", "R2A1", "R3A1", "R4A1", "R5A1", "R1B
   "D7_1", "D8_1", "D7_2", "D8_2", "D7_3", "D8_3",
   "D7_4", "D8_4", "D7_5", "D8_5", "D7_6", "D8_6"]
 
-const DevDictList = Object.fromEntries(DevList.map((key, index) => [key, DevNumList[index]]))
-
-const TrainDevList: string[] = []
-
-if (TestTrain === 'y' || TestTrain === 'Y') {
-    TrainDevList.push(`Ts${TestTrainNum}_MPU1`)
-    TrainDevList.push(`Ts${TestTrainNum}_MPU2`)
-}
-
-for (let i = 0; i < MaxTrain; i++) {
-  TrainDevList.push(`Ts${i + 1}_MPU1`);
-  TrainDevList.push(`Ts${i + 1}_MPU2`);
-}
-
-const TrainDevListIP: string[] = []
-
-if (TestTrain === 'y' || TestTrain === 'Y') {
-  TrainDevListIP.push(TestTrainIP1)
-  TrainDevListIP.push(TestTrainIP2)
-}
-
-for (let i = 0; i < MaxTrain; i++) {
-  TrainDevListIP.push(`${IPPro}${i + 1 + IPOffest}${MPU1IP}`)
-  TrainDevListIP.push(`${IPPro}${i + 1 + IPOffest}${MPU2IP}`)
-}
-
-const TrainIPDict = Object.fromEntries(TrainDevList.map((key, index) => [key, TrainDevListIP[index]]))
-
-const complete_dev_num_list = ['No', 'Date', 'Time', ...DevNumList]
+const completeDevNumList = ['No', 'Date', 'Time', ...DevNumList]
 
 // endregion
 
@@ -137,6 +92,7 @@ export class TelnetCommunication {
 
         if (readList.length < 5) {
           // will not reach
+          continue
         }
 
         const devStatusDict = list2DefaultDict(DevList)
@@ -149,7 +105,7 @@ export class TelnetCommunication {
 
         listEach.splice(1, 0, dayjs().format('YYYY-MM-DD'))
 
-        const data = zipLongest(complete_dev_num_list, listEach)
+        const data = zipLongest(completeDevNumList, listEach)
 
         this.queue.push(data)
         await sleep(PollingTime)

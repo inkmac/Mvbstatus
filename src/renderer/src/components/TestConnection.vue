@@ -19,7 +19,7 @@
     <!-- MPU IP and TestConnect button -->
     <el-col :span="8.5">
       <label class="r-5">MPU IP is</label>
-      <el-input v-model="MPU_IP" :disabled="true" style="display: inline-block; width: auto;"></el-input>
+      <el-input :value="MPU_IP" :disabled="true" style="display: inline-block; width: auto;"></el-input>
 
       <el-button type="primary" :disabled="isTesting" @click="testConnection" style="width: 130px">{{ connectionText }}</el-button>
     </el-col>
@@ -29,25 +29,24 @@
 <script setup lang="ts">
 import {computed, reactive, ref} from "vue";
 import axios from "@renderer/api/http";
-import {MPU_IP} from "@renderer/config";
 import {storeToRefs} from "pinia";
 import {useTrainStore} from '@renderer/store/trainStore'
 import {ElMessage, ElRow, ElCol, ElSelect, ElOption, ElButton, ElInput} from "element-plus"
+import { maxTrain } from "@renderer/config";
 
-const trainOptions = reactive(['Ts221', ...Array.from({length: 56}, (_, i) => `Ts${i + 1}`)])
+const trainOptions = reactive([...Array.from({length: maxTrain}, (_, i) => `Ts${i + 1}`)])
 const MPUOptions = reactive(['MPU1', 'MPU2'])
 
-const {trainValue, MPUValue} = storeToRefs(useTrainStore())
+const {trainValue, MPUValue, MPU_IP} = storeToRefs(useTrainStore())
 
 const isTesting = ref(false)
 
 const connectionText = computed(() => (isTesting.value ? '测试中...' : '测试MPU连接'))
 
-
 function testConnection() {
   isTesting.value = true
 
-  axios.post(`/ping-connection`, {pingUrl: MPU_IP})
+  axios.post(`/ping-connection`, {pingUrl: MPU_IP.value})
       .then(response => {
         const {status, message} = response.data
 

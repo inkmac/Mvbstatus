@@ -1,7 +1,7 @@
 {
   "name": "mvbstatus-electron-vite",
   "version": "1.0.0",
-  "description": "An Electron application with Vue and TypeScript",
+  "description": "Mvbstatus tools",
   "main": "./out/main/index.js",
   "author": "inkmas.com",
   "homepage": "https://electron-vite.org",

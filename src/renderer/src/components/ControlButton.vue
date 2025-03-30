@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import {onUnmounted, ref} from "vue";
-import {port, MPU_IP} from "@renderer/config";
-import axios from "axios";
+import {MPU_IP} from "@renderer/config";
+import axios from "@renderer/api/http";
 import {useTrainStore} from "@renderer/store/trainStore";
 import {storeToRefs} from "pinia";
 import {ElMessage, ElCol, ElButton} from "element-plus";
@@ -36,7 +36,7 @@ function startRunning() {
 
   ElMessage('trying to connecting...')
 
-  axios.post(`http://localhost:${port}/start-connection`, {
+  axios.post(`/start-connection`, {
     train: trainValue.value,
     MPU: MPUValue.value,
     MPU_IP: MPU_IP
@@ -54,7 +54,7 @@ function startRunning() {
     isRunning.value = true
 
     interval = setInterval(async () => {
-      const response = await axios.get(`http://localhost:${port}/get-data`)
+      const response = await axios.get(`/get-data`)
       const {status, data} = response.data
 
       if (status) {
@@ -71,7 +71,7 @@ function stopRunning() {
 
   ElMessage('trying to stop connection..., it will take some time...')
 
-  axios.post(`http://localhost:${port}/close-connection`)
+  axios.post(`/close-connection`)
       .then(response => {
         const {status, message} = response.data;
 

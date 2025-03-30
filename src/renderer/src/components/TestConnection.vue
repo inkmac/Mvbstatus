@@ -28,8 +28,8 @@
 
 <script setup lang="ts">
 import {computed, reactive, ref} from "vue";
-import axios from "axios";
-import {port, MPU_IP} from "@renderer/config";
+import axios from "@renderer/api/http";
+import {MPU_IP} from "@renderer/config";
 import {storeToRefs} from "pinia";
 import {useTrainStore} from '@renderer/store/trainStore'
 import {ElMessage, ElRow, ElCol, ElSelect, ElOption, ElButton, ElInput} from "element-plus"
@@ -47,7 +47,7 @@ const connectionText = computed(() => (isTesting.value ? '测试中...' : '测�
 function testConnection() {
   isTesting.value = true
 
-  axios.post(`http://localhost:${port}/ping-connection`, {pingUrl: MPU_IP})
+  axios.post(`/ping-connection`, {pingUrl: MPU_IP})
       .then(response => {
         const {status, message} = response.data
 

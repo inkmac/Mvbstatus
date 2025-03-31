@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import {ElCol, ElPopover} from "element-plus";
 
 </script>
 

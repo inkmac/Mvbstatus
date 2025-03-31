@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import {storeToRefs} from "pinia"
 import {useTrainStore} from "@renderer/store/trainStore"
-import {ElTableColumn, ElTable} from 'element-plus'
 
 const {statusData} = storeToRefs(useTrainStore())
 

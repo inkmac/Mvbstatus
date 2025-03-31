@@ -12,7 +12,7 @@ import {onUnmounted, ref} from "vue";
 import axios from "@renderer/api/http";
 import {useTrainStore} from "@renderer/store/trainStore";
 import {storeToRefs} from "pinia";
-import {ElMessage, ElCol, ElButton} from "element-plus";
+import {ElMessage} from "element-plus";
 
 const canStart = ref(true)
 const canStop = ref(false)

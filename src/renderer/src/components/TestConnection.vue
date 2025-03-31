@@ -31,7 +31,7 @@ import {computed, reactive, ref} from "vue";
 import axios from "@renderer/api/http";
 import {storeToRefs} from "pinia";
 import {useTrainStore} from '@renderer/store/trainStore'
-import {ElMessage, ElRow, ElCol, ElSelect, ElOption, ElButton, ElInput} from "element-plus"
+import {ElMessage} from "element-plus";
 import { maxTrain } from "@renderer/config";
 
 const trainOptions = reactive([...Array.from({length: maxTrain}, (_, i) => `Ts${i + 1}`)])

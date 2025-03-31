@@ -40,7 +40,7 @@ app.post('/start-connection', (req: Request, res: Response) => {
 })
 
 
-app.post('close-connection', (req: Request, res: Response) => {
+app.post('/close-connection', (req: Request, res: Response) => {
   telnetCommunication?.interrupt()
   res.json({status: true, message: 'Connection closed'})
 })

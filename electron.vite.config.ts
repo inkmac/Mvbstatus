@@ -16,6 +16,9 @@ export default defineConfig({
       externalizeDepsPlugin(),
     ]
   },
+  preload: {
+    plugins: [externalizeDepsPlugin()]
+  },
   renderer: {
     resolve: {
       alias: {

@@ -1,11 +1,12 @@
-import express, {Request, Response} from 'express'
+import express, {Express, Request, Response} from 'express'
 import {TelnetCommunication} from "@api/core/telnet";
 import dayjs from "dayjs";
 import ping from 'ping';
 import morgan from "morgan";
 import cors from 'cors';
+import * as http from "node:http";
 
-const app = express()
+const app: Express = express()
 app.use(express.json())
 app.use(cors())
 app.use(morgan('dev'))
@@ -63,6 +64,14 @@ app.post('/ping-connection', async (req: Request, res: Response) => {
   })
 })
 
-export function createServer(port: number, callback: () => void) {
-  return app.listen(port, callback);
+export function createServer(port: number, host: string = '127.0.0.1'): Promise<http.Server> {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port, host, () => {
+      resolve(server)
+    })
+
+    server.on('error', (err: Error) => {
+      reject(err)
+    })
+  })
 }

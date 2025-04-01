@@ -1,4 +1,5 @@
-export const API_BASE_URL = 'http://localhost:10000'
+const port = await (window as any).server.getPort()
+export const API_BASE_URL = `http://127.0.0.1:${port}`
 
 // generate static MPU_IP map
 export const maxTrain = 53

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -39,7 +39,7 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
@@ -50,9 +50,23 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createServer(10000, () => {
-    console.log('server started')
+  // start server
+  const server = await createServer(0)
+  const address = server.address()
+
+  if (typeof address === 'string') {
+    throw new Error(`Server is listening on a socket path (in Unix OS), not a TCP port: ${address}`)
+  } else if (address === null) {
+    throw new Error('address is null')
+  }
+
+  const port = address.port;
+
+  ipcMain.handle('get-port', () => {
+    return port
   })
+
+  // start window
   createWindow()
 
   app.on('activate', function () {

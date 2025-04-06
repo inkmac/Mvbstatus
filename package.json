@@ -4,7 +4,7 @@
   "description": "Mvbstatus tools",
   "main": "./out/main/index.js",
   "author": "inkmas.com",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://www.alstom.com",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",

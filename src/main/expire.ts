@@ -9,8 +9,8 @@ export function initStore(): void {
     encryptionKey: 'secretKey',
   })
 
-  if (!store.get("init")) {
-    store.set("init", true)
+  if (store.get('version') !== app.getVersion()) {
+    store.set("version", app.getVersion())
     store.set("expireDate", dayjs().add(1, "month").format())
     store.set("lastUseDate", dayjs().format())
   } else {
@@ -123,14 +123,3 @@ interface StoreOptions {
   fileExtension?: string,
   encryptionKey?: string,
 }
-
-
-// test
-
-
-// const encryptor = new Encryptor('secretKey');
-//
-// const encryptData = encryptor.encrypt('{}');
-//
-// console.log(encryptData);
-// console.log(encryptor.decrypt(encryptData));

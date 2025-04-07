@@ -17,8 +17,6 @@ export function initStore(): void {
     const lastUseDate = store.get("lastUseDate") as string
     const expireDate = store.get("expireDate") as string
 
-    console.log(expireDate);
-
     if (dayjs(lastUseDate).isAfter(dayjs())) {
       process.exit(1)
     }

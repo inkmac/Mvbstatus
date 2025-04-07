@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createServer } from "@api/index";
 import { initStore } from "@main/expire";
+import axios from "axios";
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -34,6 +35,7 @@ function createWindow(): void {
   }
 }
 
+let port: number
 
 app.whenReady().then(async () => {
   initStore()
@@ -54,7 +56,7 @@ app.whenReady().then(async () => {
     throw new Error('address is null')
   }
 
-  const port = address.port;
+  port = address.port;
 
   ipcMain.handle('get-port', () => {
     return port
@@ -69,7 +71,9 @@ app.whenReady().then(async () => {
 })
 
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+  await axios.post(`http://localhost:${port}/close-connection`)
+
   if (process.platform !== 'darwin') {
     app.quit()
   }

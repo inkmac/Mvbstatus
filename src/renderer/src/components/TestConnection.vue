@@ -27,15 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import {computed, reactive, ref} from "vue";
+import {computed, ref} from "vue";
 import axios from "@renderer/api/http";
 import {storeToRefs} from "pinia";
 import {useTrainStore} from '@renderer/store/trainStore'
 import {ElMessage} from "element-plus";
-import { maxTrain } from "@renderer/config";
-
-const trainOptions = reactive([...Array.from({length: maxTrain}, (_, i) => `Ts${i + 1}`)])
-const MPUOptions = reactive(['MPU1', 'MPU2'])
+import {MPUOptions, trainOptions} from "@renderer/config";
 
 const {trainValue, MPUValue, MPU_IP} = storeToRefs(useTrainStore())
 
@@ -54,8 +51,7 @@ function testConnection() {
 
         ElMessage({
           message: message,
-          type: showType,
-          showClose: true,
+          type: showType
         })
 
         isTesting.value = false

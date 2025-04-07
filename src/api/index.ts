@@ -18,6 +18,7 @@ let telnetCommunication: TelnetCommunication | null = null
 app.get('/get-data', (req: Request, res: Response) => {
   if (queue.length === 0) {
     res.json({status: false, data: {}})
+    return
   }
 
   const data = queue.shift();

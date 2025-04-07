@@ -33,8 +33,6 @@ function startRunning() {
 
   canStart.value = false
 
-  ElMessage('trying to connecting...')
-
   axios.post(`/start-connection`, {
     train: trainValue.value,
     MPU: MPUValue.value,
@@ -67,8 +65,6 @@ function stopRunning() {
   canStop.value = false
 
   clearIntervalIfNotNull(interval)
-
-  ElMessage('trying to stop connection..., it will take some time...')
 
   axios.post(`/close-connection`)
       .then(response => {

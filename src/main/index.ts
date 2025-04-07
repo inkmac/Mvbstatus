@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createServer } from "@api/index";
+import { initStore } from "@main/expire";
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -35,6 +36,8 @@ function createWindow(): void {
 
 
 app.whenReady().then(async () => {
+  initStore()
+
   electronApp.setAppUserModelId('com.electron')
 
   app.on('browser-window-created', (_, window) => {

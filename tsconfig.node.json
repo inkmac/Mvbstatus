@@ -11,7 +11,8 @@
     "types": ["electron-vite/node"],
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@main/*": ["src/main/*"]
     },
     "noUnusedLocals": false,
     "noUnusedParameters": false

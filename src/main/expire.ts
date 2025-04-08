@@ -5,17 +5,21 @@ import path from 'path';
 import CryptoJS from 'crypto-js'
 
 export function initStore(): void {
-  const store = new Store({
-    encryptionKey: 'secretKey',
+  const store = new Store<StoreData>({
+    encryptionKey: 'secretKey'
   })
 
-  if (store.get('version') !== app.getVersion()) {
-    store.set("version", app.getVersion())
+  const versions = store.get('versions') || []
+  const currentVersion = app.getVersion()
+
+  if (!versions.includes(currentVersion)) {
+    versions.push(currentVersion)
+    store.set("versions", versions)
     store.set("expireDate", dayjs().add(1, "month").format())
     store.set("lastUseDate", dayjs().format())
   } else {
-    const lastUseDate = store.get("lastUseDate") as string
-    const expireDate = store.get("expireDate") as string
+    const lastUseDate = store.get("lastUseDate")
+    const expireDate = store.get("expireDate")
 
     if (dayjs(lastUseDate).isAfter(dayjs())) {
       process.exit(1)
@@ -30,7 +34,7 @@ export function initStore(): void {
 }
 
 
-class Store {
+class Store<T extends Record<string, any>> {
   private readonly path: string
   private readonly name: string
   private readonly fileExtension: string
@@ -50,24 +54,24 @@ class Store {
     this.ensureFileExists()
   }
 
-  public set(key: string, value: any): void {
+  public set<K extends keyof T>(key: K, value: T[K]): void {
     const data = this.readData();
     data[key] = value;
     this.writeData(data);
   }
 
-  public get(key: string): any {
+  public get<K extends keyof T>(key: K): T[K] {
     const data = this.readData();
     return data[key];
   }
 
-  private readData(): Record<string, any> {
+  private readData(): T {
     const fileData = fs.readFileSync(this.filePath, 'utf-8')
     const decryptData = this.encryptor.decrypt(fileData)
     return JSON.parse(decryptData)
   }
 
-  private writeData(data: Record<string, any>): void {
+  private writeData(data: T): void {
     const stringify = JSON.stringify(data, null, 2)
     const encryptData = this.encryptor.encrypt(stringify)
     fs.writeFileSync(this.filePath, encryptData, 'utf-8')
@@ -121,5 +125,11 @@ interface StoreOptions {
   path?: string,
   name?: string,
   fileExtension?: string,
-  encryptionKey?: string,
+  encryptionKey?: string
+}
+
+interface StoreData {
+  versions: string[]
+  expireDate: string
+  lastUseDate: string
 }

@@ -55,7 +55,6 @@ export class TelnetCommunication {
       await this.start0()
     } catch (e) {
       this.telnetConnect?.send('exit\n')
-      this.telnetConnect?.destroy()
     }
   }
 
@@ -74,19 +73,13 @@ export class TelnetCommunication {
       await this.telnetConnect.send('', { waitFor: 'login: ' })
       await this.telnetConnect.send(user + '\n')
 
-      // time check
-      await this.telnetConnect.send('date\n')
-      const readDate = await this.telnetConnect.send('', { waitFor: Ending, timeout: 2000 })
-      const readDateList = readDate.split(' ')
-      // TODO
+      await this.telnetConnect.send('obsterm.elf\n', { waitFor: Ending, timeout: 2000 })
 
-      await this.telnetConnect.send('obsterm.elf\n')
-      await this.telnetConnect.send('', { waitFor: Ending, timeout: 2000 })
+      console.log('come to obsterm.elf: ---')
 
       while (!this.interrupted) {
         this.proTime++
-        await this.telnetConnect.send('mvb d s\n')
-        const readLine = await this.telnetConnect.send('', { waitFor: Ending, timeout: 2000 });
+        const readLine = await this.telnetConnect.send('mvb d s\n', { waitFor: Ending, timeout: 2000 })
 
         const readList = readLine.split('\r\n')
 
@@ -123,7 +116,6 @@ export class TelnetCommunication {
   public interrupt(): void {
     this.interrupted = true
     this.telnetConnect?.send('exit\n')
-    this.telnetConnect?.destroy()
   }
 }
 
@@ -175,28 +167,36 @@ function list2Dict(devList: string[], statusDict: Record<string, string>, inputL
   const newDict = { ...statusDict }
 
   for (const eachCell of inputList) {
-    if (eachCell === splitFlag) {
+    if (eachCell === splitFlag)
       flagNum++
-      if (flagNum <= 2) continue
-      if (flagNum === 3) break
-    }
+
+    if (flagNum <= 2 && eachCell === splitFlag)
+      continue
 
     if (flagNum === 2) {
-      const eachList = eachCell.split(/\s+/)
-      if (eachList.length > 13) {
-        const [ , , deviceId, , , , , , , , , bit12, bit13 ] = eachList
+      const eachList = eachCell.trim().split(/\s+/)
 
-        if (bit12 === "1" && bit13 === "0") {
-          newDict[deviceId] = "C1"
-        } else if (bit12 === "0" && bit13 === "0") {
-          newDict[deviceId] = "C0"
-        } else if (bit12 === "0" && bit13 === "1") {
-          newDict[deviceId] = "AF"
-        } else if (bit12 === "1" && bit13 === "1") {
-          newDict[deviceId] = "BF"
+      if (eachList.length > 13) {
+        if (eachList[12] === "1" && eachList[13] === "0") {
+          newDict[eachList[2]] = "C1"
+          continue
+        } else if (eachList[12] === "0" && eachList[13] === "0") {
+          newDict[eachList[2]] = "C0"
+          continue
+        } else if (eachList[12] === "0" && eachList[13] === "1") {
+          newDict[eachList[2]] = "AF"
+          continue
+        } else if (eachList[12] === "1" && eachList[13] === "1") {
+          newDict[eachList[2]] = "BF"
+          continue
         }
+      } else {
+        continue
       }
     }
+
+    if (flagNum === 3)
+      break
   }
 
   const specialDevices = new Set(["0x031", "0x032", "0x033", "0x034",

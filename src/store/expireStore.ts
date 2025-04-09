@@ -1,4 +1,4 @@
-import Store from "@store/store";
+import Store from "@store/base/store";
 import dayjs from "dayjs";
 import { app } from "electron";
 

@@ -3,8 +3,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createServer } from "@api/index";
-import { initExpireStore } from "@store/instances/expireStore";
-import { configStore, initConfigStore } from "@store/instances/configStore";
+import { initExpireStore } from "@store/expireStore";
+import { configStore, initConfigStore } from "@store/configStore";
 import axios from "axios";
 
 function createWindow(): void {

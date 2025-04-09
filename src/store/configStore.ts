@@ -1,4 +1,4 @@
-import Store from "@store/store";
+import Store from "@store/base/store";
 import { join } from "path";
 import { app } from "electron";
 

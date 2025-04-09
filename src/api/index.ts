@@ -6,7 +6,7 @@ import morgan from "morgan";
 import cors from 'cors';
 import * as http from "node:http";
 import { dialog } from "electron";
-import { configStore } from "@store/instances/configStore";
+import { configStore } from "@store/configStore";
 import { join } from "path";
 
 const app: Express = express()

@@ -12,8 +12,8 @@ export default class Store<T extends Record<string, any>> {
 
   constructor(options: StoreOptions = {}) {
     this.path = options.path ?? app.getPath('userData')
-    this.name = options.name ?? 'Software'
-    this.fileExtension = options.fileExtension ? `.${options.fileExtension}` : ''
+    this.name = options.name ?? 'config'
+    this.fileExtension = handleFileExtension(options.fileExtension)
 
     this.encryptor = options.encryptionKey ?
       new Encryptor(options.encryptionKey) : new EmptyEncryptor()
@@ -61,6 +61,18 @@ export default class Store<T extends Record<string, any>> {
   }
 }
 
+function handleFileExtension(fileExtension: string | undefined): string {
+  if (fileExtension === undefined) {
+    return '.json'
+  } else if (fileExtension === '') {
+    return ''
+  } else if (fileExtension.startsWith('.')) {
+    return fileExtension
+  } else {
+    return `.${fileExtension}`
+  }
+}
+
 class Encryptor {
   private readonly encryptionKey: string;
   private readonly validPrefix: string = '@@VALID@@';
@@ -99,6 +111,6 @@ class EmptyEncryptor {
 interface StoreOptions {
   path?: string,
   name?: string,
-  fileExtension?: string,
+  fileExtension?: '' | 'json',
   encryptionKey?: string
 }

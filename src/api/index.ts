@@ -5,6 +5,9 @@ import ping from 'ping';
 import morgan from "morgan";
 import cors from 'cors';
 import * as http from "node:http";
+import { dialog } from "electron";
+import { configStore } from "@store/instances/configStore";
+import { join } from "path";
 
 const app: Express = express()
 app.use(express.json())
@@ -13,7 +16,7 @@ app.use(morgan('dev'))
 
 const queue: object[] = []
 let telnetCommunication: TelnetCommunication | null = null
-
+let logPath: string = configStore.get('logPath')
 
 app.get('/get-data', (req: Request, res: Response) => {
   if (queue.length === 0) {
@@ -26,9 +29,9 @@ app.get('/get-data', (req: Request, res: Response) => {
 })
 
 /**
- *     train: string
- *     MPU: string
- *     MPU_IP: string
+ *  train: string
+ *  MPU: string
+ *  MPU_IP: string
  */
 app.post('/start-connection', (req: Request, res: Response) => {
   const {train, MPU, MPU_IP} = req.body
@@ -36,7 +39,9 @@ app.post('/start-connection', (req: Request, res: Response) => {
   const date = dayjs().format('YYYY_MM_DD')
   const logName = `${train}_${MPU}_${date}.log`
 
-  telnetCommunication = new TelnetCommunication(MPU_IP, logName, queue)
+  const logFilePath = join(logPath, logName)
+
+  telnetCommunication = new TelnetCommunication(MPU_IP, logFilePath, queue)
   telnetCommunication.start().then()
   res.json({status: true, message: 'Connection started'})
 })
@@ -47,7 +52,9 @@ app.post('/close-connection', (req: Request, res: Response) => {
   res.json({status: true, message: 'Connection closed'})
 })
 
-
+/**
+ *  pingUrl: string
+ */
 app.post('/ping-connection', async (req: Request, res: Response) => {
   const { pingUrl } = req.body
   const pingResponse = await ping.promise.probe(pingUrl)
@@ -64,6 +71,23 @@ app.post('/ping-connection', async (req: Request, res: Response) => {
     message: `connect successfully, cost ${pingResponse.time} ms`
   })
 })
+
+
+app.post('/choose-log-path', async (req: Request, res: Response) => {
+  const result = await dialog.showOpenDialog({
+    title: '选择日志保存路径',
+    properties: ['openDirectory']
+  })
+
+  if (result.canceled) {
+    res.json({status: false})
+    return
+  } else {
+    res.json({status: true, path: result.filePaths[0]})
+    return
+  }
+})
+
 
 export function createServer(port: number, host: string = '127.0.0.1'): Promise<http.Server> {
   return new Promise((resolve, reject) => {

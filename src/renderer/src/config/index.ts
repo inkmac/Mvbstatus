@@ -23,11 +23,11 @@ const trainDevListIP = Array.from({ length: maxTrain }, (_, i) => [
 ]).flat();
 
 // TEST USED TRAIN
-// trainOptions.unshift('Ts221')
-// trainDevList.unshift('Ts221_MPU1')
-// trainDevList.unshift('Ts221_MPU2')
-// trainDevListIP.unshift('192.168.1.69')
-// trainDevListIP.unshift('192.168.1.69')
+trainOptions.unshift('Ts221')
+trainDevList.unshift('Ts221_MPU1')
+trainDevList.unshift('Ts221_MPU2')
+trainDevListIP.unshift('192.168.1.69')
+trainDevListIP.unshift('192.168.1.69')
 
 export const trainIPDict = Object.fromEntries(
   trainDevList.map((key, index) => [key, trainDevListIP[index]])

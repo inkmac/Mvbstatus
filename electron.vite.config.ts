@@ -10,7 +10,8 @@ export default defineConfig({
     resolve: {
       alias: {
         '@api': resolve('src/api'),
-        '@main': resolve('src/main')
+        '@main': resolve('src/main'),
+        '@store': resolve('src/store'),
       }
     },
     plugins: [

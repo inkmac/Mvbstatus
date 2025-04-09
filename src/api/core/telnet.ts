@@ -3,6 +3,7 @@ import fs from "fs";
 import { sleep } from "@api/utils/time";
 import { zipLongest } from '@api/utils/utils'
 import dayjs from "dayjs";
+import path from "path";
 
 // region Telnet Static Config
 
@@ -85,6 +86,8 @@ export class TelnetCommunication {
 
         if (readList.length < 5) {
           // will not reach
+          console.log('readList.length < 5');
+          console.log(readLine);
           continue
         }
 
@@ -120,8 +123,14 @@ export class TelnetCommunication {
 }
 
 
-async function dataLogAsync(log_name: string, info_log: string): Promise<void> {
-  await fs.promises.appendFile(log_name, info_log + '\n', { encoding: 'utf-8' })
+async function dataLogAsync(logFilePath: string, info_log: string): Promise<void> {
+  const dir = path.dirname(logFilePath)
+
+  if (!fs.existsSync(dir)) {
+    await fs.promises.mkdir(dir, { recursive: true })
+  }
+
+  await fs.promises.appendFile(logFilePath, info_log + '\n', { encoding: 'utf-8' })
 }
 
 function list2Date(inputList: string[]): string {

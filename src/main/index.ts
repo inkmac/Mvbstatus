@@ -3,7 +3,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createServer } from "@api/index";
-import { initStore } from "@main/expire";
+import { initExpireStore } from "@store/instances/expireStore";
+import { configStore, initConfigStore } from "@store/instances/configStore";
 import axios from "axios";
 
 function createWindow(): void {
@@ -38,7 +39,8 @@ function createWindow(): void {
 let port: number
 
 app.whenReady().then(async () => {
-  initStore()
+  initExpireStore()
+  initConfigStore()
 
   electronApp.setAppUserModelId('com.electron')
 
@@ -69,7 +71,6 @@ app.whenReady().then(async () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
-
 
 app.on('window-all-closed', async () => {
   await axios.post(`http://localhost:${port}/close-connection`)

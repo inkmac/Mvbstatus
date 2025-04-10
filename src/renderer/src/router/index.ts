@@ -13,7 +13,7 @@ const router = createRouter({
           name: 'settings-general',
           path: 'general',
           component: GeneralSettings
-        }
+        },
       ]
     },
   ]

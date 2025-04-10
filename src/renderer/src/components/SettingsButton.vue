@@ -1,12 +1,11 @@
 <template>
-  <el-icon class="settings-button" @click="onOpen">
+  <el-icon class="settings-button" @click="openDialog">
     <Setting/>
   </el-icon>
 
   <el-dialog
     v-model="dialogVisible"
     width="700"
-    :before-close="onClose"
   >
     <template #header>
       <span style="font-size: 24px">设置</span>
@@ -33,19 +32,15 @@
 </template>
 
 <script setup lang="ts">
-import { Setting } from '@element-plus/icons-vue';
+import { Setting } from "@element-plus/icons-vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const dialogVisible = ref(false)
 
-function onClose(done: () => void) {
-  done()
-}
-
 const router = useRouter()
 
-function onOpen() {
+function openDialog() {
   dialogVisible.value = true
   router.push('/settings/general')
 }

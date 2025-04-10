@@ -5,9 +5,10 @@ import ping from 'ping';
 import morgan from "morgan";
 import cors from 'cors';
 import * as http from "node:http";
-import { dialog } from "electron";
+import { dialog, shell } from "electron";
 import { configStore } from "@store/configStore";
 import { join } from "path";
+import fs from "fs";
 
 const app: Express = express()
 app.use(express.json())
@@ -16,7 +17,6 @@ app.use(morgan('dev'))
 
 const queue: object[] = []
 let telnetCommunication: TelnetCommunication | null = null
-let logPath: string = configStore.get('logPath')
 
 app.get('/get-data', (req: Request, res: Response) => {
   if (queue.length === 0) {
@@ -39,7 +39,8 @@ app.post('/start-connection', (req: Request, res: Response) => {
   const date = dayjs().format('YYYY_MM_DD')
   const logName = `${train}_${MPU}_${date}.log`
 
-  const logFilePath = join(logPath, logName)
+  const logDirectoryPath = configStore.get('logDirectoryPath')
+  const logFilePath = join(logDirectoryPath, logName)
 
   telnetCommunication = new TelnetCommunication(MPU_IP, logFilePath, queue)
   telnetCommunication.start().then()
@@ -73,19 +74,39 @@ app.post('/ping-connection', async (req: Request, res: Response) => {
 })
 
 
-app.post('/choose-log-path', async (req: Request, res: Response) => {
+app.post('/settings/choose-log-directory', async (req: Request, res: Response) => {
   const result = await dialog.showOpenDialog({
     title: '选择日志保存路径',
     properties: ['openDirectory']
   })
-
   if (result.canceled) {
     res.json({status: false})
     return
   } else {
-    res.json({status: true, path: result.filePaths[0]})
+    const logDirectoryPath = result.filePaths[0]
+    configStore.set('logDirectoryPath', logDirectoryPath)
+    res.json({status: true, path: logDirectoryPath})
     return
   }
+})
+
+
+app.get('/settings/mvbstatus-log-info', (req: Request, res: Response) => {
+  const logDirectoryPath = configStore.get('logDirectoryPath')
+  res.json({status: true, logDirectoryPath: logDirectoryPath})
+  return
+})
+
+/**
+ *  directoryPath: string
+ */
+app.post('/settings/open-directory', async (req: Request, res: Response) => {
+  const { directoryPath } = req.body
+
+  await fs.promises.mkdir(directoryPath, { recursive: true })
+  await shell.openPath(directoryPath)
+  res.json({status: true})
+  return
 })
 
 

@@ -11,11 +11,11 @@ export const configStore = new Store<ConfigStoreData>({
 export function initConfigStore(): void {
   if (!configStore.get("init")) {
     configStore.set("init", true)
-    configStore.set("logPath", join(app.getPath("documents"), 'MvbstatusLogs'))
+    configStore.set("logDirectoryPath", join(app.getPath("documents"), 'MvbstatusLogs'))
   }
 }
 
 interface ConfigStoreData {
   init: boolean,
-  logPath: string,
+  logDirectoryPath: string,
 }

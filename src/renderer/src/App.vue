@@ -1,4 +1,5 @@
 <template>
+  <SettingsButton/>
   <Title/>
   <TestConnection/>
   <StatusTable/>
@@ -14,6 +15,7 @@ import TestConnection from "@renderer/components/TestConnection.vue"
 import StatusTable from "@renderer/components/StatusTable.vue";
 import SoftwareInfo from "@renderer/components/SoftwareInfo.vue";
 import ControlButton from "@renderer/components/ControlButton.vue";
+import SettingsButton from "@renderer/components/SettingsButton.vue";
 
 </script>
 

@@ -31,8 +31,9 @@ function openPath() {
 
 function changePath() {
   axios.post('/settings/choose-log-directory').then(res => {
-    const { path } = res.data
-    directoryPath.value = path
+    const { status, path } = res.data
+    if (status)
+      directoryPath.value = path
   })
 }
 

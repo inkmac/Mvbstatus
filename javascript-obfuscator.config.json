@@ -1,7 +1,0 @@
-{
-  "compact": true,
-  "controlFlowFlattening": true,
-  "selfDefending": true,
-  "stringArray": true,
-  "stringArrayThreshold": 0.75
-}

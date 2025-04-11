@@ -1,4 +1,4 @@
-const port = await (window as any).server.getPort()
+const port = await window.server.getPort()
 export const API_BASE_URL = `http://127.0.0.1:${port}`
 
 // generate static MPU_IP map

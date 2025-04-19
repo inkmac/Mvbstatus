@@ -58,5 +58,7 @@ function getColumnWidth(columnName: string) {
   .status-table {
     margin-top: 10px;
     font-size: 14px;
+    resize: vertical;
+    overflow: auto;
   }
 </style>

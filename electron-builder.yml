@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: mvbstatus-electron-vite
+appId: com.electron.mvbstatus
+productName: Mvbstatus
 directories:
   buildResources: build
 files:
@@ -14,7 +14,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: mvbstatus-electron-vite
+  executableName: Mvbstatus
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
